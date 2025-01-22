@@ -9,7 +9,7 @@
                this.script = script
           }
 
-          def buildDockerImage(String imageName) {
+          def buildDockerImage(String imageName, String imageTag) {
               script.echo "building the docker image..."
               script.withCredentials([script.usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     script.sh "docker build -t ${imageName}:${imageTag} ."
