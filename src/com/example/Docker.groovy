@@ -27,14 +27,14 @@ class Docker implements Serializable {
         // script.sh "docker push ${imageName}:${imageTag}"
         script.sh "sudo docker push ${imageName}:${imageTag}"
     }
-/*
-    def ec2Deploy(String ec2Instance, String shellCmd) {
-        // script.sh "docker push ${imageName}:${imageTag}"
-        script.sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
-        script.sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
-        script.sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} '${shellCmd}'"
+
+    def ec2Deploy(String ec2Instance, String shellCmd, String ec2Path) {
+        script.sh """
+        scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:${ec2Path}
+        scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:${ec2Path}
+        ssh -o StrictHostKeyChecking=no ${ec2Instance} "${shellCmd}"
+        """
     }
-*/
 }
 
 
