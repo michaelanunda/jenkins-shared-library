@@ -10,6 +10,19 @@ class Docker implements Serializable {
         this.script = script
     }
 
+    def incrementVersion() {
+        script.echo 'Incrementing app version...'
+        script.sh 'mvn build-helper:parse-version versions:set \
+            -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+            versions:commit'
+        def matcher = script.readFile('pom.xml') =~ '<version>(.+)</version>'
+        def version = matcher[0][1]
+        script.env.pomVersion = version
+        script.env.IMAGE_NAME = "uba31/demo-app"
+        script.env.IMAGE_TAG = "${version}-${script.env.BUILD_NUMBER}"
+        script.env.IMAGE_NAME_TAG = "${script.env.IMAGE_NAME}:${script.env.IMAGE_TAG}"
+    }
+
     def buildDockerImage(String imageNameTag) {
         script.echo "building the docker image..."
         // script.sh "docker build -t ${imageNameTag} ."
