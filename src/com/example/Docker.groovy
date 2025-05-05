@@ -11,7 +11,7 @@ class Docker implements Serializable {
     }
 
     def incrementVersion() {
-        script.echo 'Incrementing app version...'
+        script.echo 'Incrementing app version inside pom.xml...'
         script.sh 'mvn build-helper:parse-version versions:set \
             -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
             versions:commit'
@@ -21,6 +21,11 @@ class Docker implements Serializable {
         script.env.IMAGE_NAME = "uba31/demo-app"
         script.env.IMAGE_TAG = "${version}-${script.env.BUILD_NUMBER}"
         script.env.IMAGE_NAME_TAG = "${script.env.IMAGE_NAME}:${script.env.IMAGE_TAG}"
+    }
+
+    def buildJar() {
+        script.echo "building the application for branch ${BRANCH_NAME}"
+        script.sh 'mvn clean install'
     }
 
     def buildDockerImage(String imageNameTag) {
