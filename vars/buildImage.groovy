@@ -2,7 +2,7 @@
 
 import com.example.Docker
 def call(String imageNameTag) {
-    return new Docker(this).buildDockerImage(imageName)
+    return new Docker(this).buildDockerImage(imageNameTag)
 }
 
 
