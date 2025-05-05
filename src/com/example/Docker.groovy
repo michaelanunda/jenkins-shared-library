@@ -57,11 +57,19 @@ class Docker implements Serializable {
         """
     }
 
-    def commitChanges(String xxx) {
+    def commitAndPushChanges(String pomVersion) {
+        script.echo "Commiting and pushing changes to remote Git repo..."
+        script.withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
         script.sh """
-        scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:${ec2Path}
-        scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:${ec2Path}
-        ssh -o StrictHostKeyChecking=no ${ec2Instance} "${shellCmd}"
+        git config --global user.name 'Jenkins'
+        git config --global user.email 'jenkins@example.com'
+        git status
+        git branch
+        git config --list
+        git add .
+        git commit -m "Incremented version of pom.xml to ${env.pomVersion}"
+        git push https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/michaelanunda/mavenapp2.1.git HEAD:starting-code
         """
+      }
     }
 }
