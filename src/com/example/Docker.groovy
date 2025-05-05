@@ -65,6 +65,7 @@ class Docker implements Serializable {
 
     def commitAndPushChanges(String pomVersion) {
         script.echo "Commiting and pushing changes to remote Git repo..."
+        script.withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
         script.sh """
         git config --global user.name 'Jenkins'
         git config --global user.email 'jenkins@example.com'
@@ -75,5 +76,6 @@ class Docker implements Serializable {
         git commit -m "Incremented version of pom.xml to ${pomVersion}"
         git push https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/michaelanunda/mavenapp2.1.git HEAD:starting-code
         """
+     }
     }
 }
