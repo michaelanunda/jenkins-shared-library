@@ -1,6 +1,6 @@
 #!/user/bin/env groovy
 
 import com.example.Docker
-def call() {
-    return new Docker(this).commitAndPushChanges(String pomVersion)
+def call(String pomVersion) {
+    return new Docker(this).commitAndPushChanges(pomVersion)
 }
