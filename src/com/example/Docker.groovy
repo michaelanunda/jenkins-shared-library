@@ -30,7 +30,7 @@ class Docker implements Serializable {
     }
 
     def buildJar() {
-        script.echo "building the application for branch ${BRANCH_NAME}"
+        script.echo "building the application for branch ${script.env.BRANCH_NAME}"
         script.sh 'mvn clean install'
     }
 
