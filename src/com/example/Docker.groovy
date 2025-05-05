@@ -10,10 +10,10 @@ class Docker implements Serializable {
         this.script = script
     }
 
-    def buildDockerImage(String imageName) {
+    def buildDockerImage(String imageNameTag) {
         script.echo "building the docker image..."
-        // script.sh "docker build -t ${imageName} ."
-        script.sh "sudo docker build -t ${imageName} ."
+        // script.sh "docker build -t ${imageNameTag} ."
+        script.sh "sudo docker build -t ${imageNameTag} ."
     }
 
     def dockerLogin() {
@@ -23,9 +23,9 @@ class Docker implements Serializable {
         }
     }
 
-    def dockerPush(String imageName) {
-        // script.sh "docker push ${imageName}"
-        script.sh "sudo docker push ${imageName}"
+    def dockerPush(String imageNameTag) {
+        // script.sh "docker push ${imageNameTag}"
+        script.sh "sudo docker push ${imageNameTag}"
     }
 
     def ec2Deploy(String ec2Instance, String shellCmd, String ec2Path) {
