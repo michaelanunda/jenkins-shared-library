@@ -21,6 +21,12 @@ class Docker implements Serializable {
         script.env.IMAGE_NAME = "uba31/demo-app"
         script.env.IMAGE_TAG = "${version}-${script.env.BUILD_NUMBER}"
         script.env.IMAGE_NAME_TAG = "${script.env.IMAGE_NAME}:${script.env.IMAGE_TAG}"
+
+        /*
+        script.IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+        script.env.IMAGE_TAG = IMAGE_TAG
+        script.env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${IMAGE_TAG}"
+        */
     }
 
     def buildJar() {
