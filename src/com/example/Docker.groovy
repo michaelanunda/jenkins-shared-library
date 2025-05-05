@@ -67,7 +67,7 @@ class Docker implements Serializable {
         git branch
         git config --list
         git add .
-        git commit -m "Incremented version of pom.xml to ${env.pomVersion}"
+        git commit -m "Incremented version of pom.xml to ${pomVersion}"
         git push https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/michaelanunda/mavenapp2.1.git HEAD:starting-code
         """
       }
