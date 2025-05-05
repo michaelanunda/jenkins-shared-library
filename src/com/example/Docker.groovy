@@ -36,17 +36,28 @@ class Docker implements Serializable {
 
     def dockerLogin() {
         script.withCredentials([script.usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+            script.echo "Logging into DockerHub..."
             // script.sh "echo '${script.PASS}' | docker login -u '${script.USER}' --password-stdin"
             script.sh "echo '${script.PASS}' | sudo docker login -u '${script.USER}' --password-stdin"
         }
     }
 
     def dockerPush(String imageNameTag) {
+        script.echo "Pushing Image into DockerHub..."
         // script.sh "docker push ${imageNameTag}"
         script.sh "sudo docker push ${imageNameTag}"
     }
 
     def ec2Deploy(String ec2Instance, String shellCmd, String ec2Path) {
+        script.echo "Deploying and Running Image inside of EC2 Instance..."
+        script.sh """
+        scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:${ec2Path}
+        scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:${ec2Path}
+        ssh -o StrictHostKeyChecking=no ${ec2Instance} "${shellCmd}"
+        """
+    }
+
+    def commitChanges(String xxx) {
         script.sh """
         scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:${ec2Path}
         scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:${ec2Path}
@@ -54,28 +65,3 @@ class Docker implements Serializable {
         """
     }
 }
-
-
-
-
-/*
-       package com.example
-
-       class Docker implements Serializable {
-
-          def script
-
-          Docker(script) {
-               this.script = script
-          }
-
-          def buildDockerImage(String imageName, String imageTag) {
-              script.echo "building the docker image..."
-              script.withCredentials([script.usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    script.sh "docker build -t ${imageName}:${imageTag} ."
-                    script.sh "echo '${script.PASS}' | docker login -u '${script.USER}' --password-stdin"
-                    script.sh "docker push ${imageName}:${imageTag}"
-               }
-          }
-       }
-*/
